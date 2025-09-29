@@ -21,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscureConfirmPassword = true;
   bool _loading = false;
 
+  // Función para registrar usuario
   Future<void> _registerUser() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -28,11 +29,11 @@ class _RegisterPageState extends State<RegisterPage> {
       _loading = true;
     });
 
+    // Intentar registrar usuario
     try {
       final supabase = Supabase.instance.client;
 
       // Registrar en Supabase Auth
-      
       final authResponse = await supabase.auth.signUp(
         email: _correoController.text.trim(),
         password: _passwordController.text,
@@ -42,10 +43,10 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (authResponse.user != null) {
-        // Opcional: guardar username en tabla "profiles"
+        // Opcional: guardar username en tabla "User"
         final data =  await  supabase.from('profiles').insert({
           'id': authResponse.user!.id,
-          'username': _usuarioController.text.trim(),
+          'nickname': _usuarioController.text.trim(),
         });
         print(data);
         if (mounted) {
@@ -61,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         }
       }
+      // Manejar error de registro
     } on AuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -68,6 +70,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Colors.red,
         ),
       );
+      // Manejar otros errores
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -75,6 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Colors.red,
         ),
       );
+      // Limpiar estado
     } finally {
       setState(() {
         _loading = false;
@@ -82,10 +86,12 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+// Interfaz de usuario
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple.shade50,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Center(
@@ -96,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Registrarse",
+                    "Handsware AI",
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -104,6 +110,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
+
+                  const Text(
+                      'Registrarse',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 30),
 
                   // Usuario
                   TextFormField(

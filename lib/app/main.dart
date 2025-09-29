@@ -1,7 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
-import 'register_login/login_page.dart';
-import 'register_login/register_page.dart';
+import 'login_page.dart';
+import 'register_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
